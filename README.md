@@ -19,7 +19,7 @@ it can be used as a drop-in replacement in some situations.
 ## GETTING STARTED
 
 r128gain is (mostly) compatible with mp3gain's command-line arguments (the `-r`
-and `-a` are always implied). Here are a few examples:
+option is always implied). Here are a few examples:
 
 ```bash
 $ r128gain *.mp3            # scan some mp3 files without tagging

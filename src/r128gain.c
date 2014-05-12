@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 
 	double pre_gain = 0.f;
 
-	bool no_clip = false, warn_clip = true;
+	bool no_clip = false, warn_clip = true, do_album = false;
 
 	while ((rc = getopt_long(argc, argv, short_opts, long_opts, &i)) !=-1) {
 		switch (rc) {
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case 'a':
-				/* noop */
+				do_album = true;
 				break;
 
 			case 'c':
@@ -134,6 +134,9 @@ int main(int argc, char *argv[]) {
 
 		if (scan == NULL)
 			continue;
+
+		if (do_album)
+			scan_set_album_result(scan, pre_gain);
 
 		if ((scan -> track_gain > (1.f / scan -> track_peak)) ||
 		    (scan -> album_gain > (1.f / scan -> album_peak)))

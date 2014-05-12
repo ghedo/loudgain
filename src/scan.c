@@ -194,7 +194,6 @@ scan_result *scan_get_track_result(unsigned index, double pre_gain) {
 	unsigned ch;
 
 	double global, range, peak = 0.0;
-	double global_m, range_m, peak_m = 0.0;
 
 	scan_result *result = NULL;
 	ebur128_state *ebur128 = NULL;
@@ -225,16 +224,6 @@ scan_result *scan_get_track_result(unsigned index, double pre_gain) {
 		peak = FFMAX(peak, tmp);
 	}
 
-	if (ebur128_loudness_global_multiple(
-		scan_states, scan_nb_files, &global_m
-	) != EBUR128_SUCCESS)
-		global_m = 0.0;
-
-	if (ebur128_loudness_range_multiple(
-		scan_states, scan_nb_files, &range_m
-	) != EBUR128_SUCCESS)
-		range_m = 0.0;
-
 	result -> file                 = scan_files[index];
 
 	result -> track_gain           = LUFS_TO_RG(global) + pre_gain;
@@ -242,12 +231,31 @@ scan_result *scan_get_track_result(unsigned index, double pre_gain) {
 	result -> track_loudness       = global;
 	result -> track_loudness_range = range;
 
-	result -> album_gain           = LUFS_TO_RG(global_m) + pre_gain;
-	result -> album_peak           = peak_m;
-	result -> album_loudness       = global_m;
-	result -> album_loudness_range = range_m;
+	result -> album_gain           = 0.f;
+	result -> album_peak           = 0.f;
+	result -> album_loudness       = 0.f;
+	result -> album_loudness_range = 0.f;
 
 	return result;
+}
+
+void scan_set_album_result(scan_result *result, double pre_gain) {
+	double global, range;
+
+	if (ebur128_loudness_global_multiple(
+		scan_states, scan_nb_files, &global
+	) != EBUR128_SUCCESS)
+		global = 0.0;
+
+	if (ebur128_loudness_range_multiple(
+		scan_states, scan_nb_files, &range
+	) != EBUR128_SUCCESS)
+		range = 0.0;
+
+	result -> album_gain           = LUFS_TO_RG(global) + pre_gain;
+	result -> album_peak           = result -> track_peak;
+	result -> album_loudness       = global;
+	result -> album_loudness_range = range;
 }
 
 static void scan_frame(ebur128_state *ebur128, AVFrame *frame,

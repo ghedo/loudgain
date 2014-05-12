@@ -54,6 +54,7 @@ void scan_deinit(void);
 int scan_file(const char *file, unsigned index);
 
 scan_result *scan_get_track_result(unsigned index, double pre_gain);
+void scan_set_album_result(scan_result *result, double pre_amp);
 
 #ifdef __cplusplus
 }
