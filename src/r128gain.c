@@ -71,7 +71,10 @@ int main(int argc, char *argv[]) {
 
 	double pre_gain = 0.f;
 
-	bool no_clip = false, warn_clip = true, do_album = false;
+	bool no_clip    = false,
+	     warn_clip  = true,
+	     do_album   = false,
+	     tab_output = false;
 
 	while ((rc = getopt_long(argc, argv, short_opts, long_opts, &i)) !=-1) {
 		switch (rc) {
@@ -103,7 +106,7 @@ int main(int argc, char *argv[]) {
 			}
 
 			case 'o':
-				fail_printf("-o not implemented");
+				tab_output = true;
 				break;
 
 			case 'q':
@@ -130,6 +133,9 @@ int main(int argc, char *argv[]) {
 
 		scan_file(argv[i], i - optind);
 	}
+
+	if (tab_output)
+		printf("File\tMP3 gain\tdB gain\tMax Amplitude\tMax global_gain\tMin global_gain\n");
 
 	for (i = 0; i < nb_files; i++) {
 		bool will_clip = false;
@@ -190,12 +196,22 @@ int main(int argc, char *argv[]) {
 				break;
 		}
 
-		printf("\nTrack: %s\n", scan -> file);
+		if (tab_output) {
+			printf("%s\t", scan -> file);
+			printf("0\t");
+			printf("%f\t", scan -> track_gain);
+			printf("%f\t", scan -> track_peak * 32768.0);
+			printf("0\t");
+			printf("0\n");
 
-		printf(" Loudness: %5.1f LUFS\n", scan -> track_loudness);
-		printf(" Range:    %5.1f LU\n", scan -> track_loudness_range);
-		printf(" Gain:     %5.1f dB\n", scan -> track_gain);
-		printf(" Peak:     %5.1f\n", scan -> track_peak);
+		} else {
+			printf("\nTrack: %s\n", scan -> file);
+
+			printf(" Loudness: %5.1f LUFS\n", scan -> track_loudness);
+			printf(" Range:    %5.1f LU\n", scan -> track_loudness_range);
+			printf(" Gain:     %5.1f dB\n", scan -> track_gain);
+			printf(" Peak:     %5.1f\n", scan -> track_peak);
+		}
 
 		if (warn_clip && will_clip)
 			err_printf("The track will clip");
@@ -226,6 +242,7 @@ static inline void help(void) {
 	CMD_HELP("--noclip", "-k", "Lower track and album gain to avoid clipping");
 
 	CMD_HELP("--db-gain",  "-d",  "Apply the given pre-amp value (in dB)");
+	CMD_HELP("--output",   "-o",  "Database-friendly tab-delimited list output");
 
 	puts("");
 
