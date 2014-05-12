@@ -1,0 +1,85 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "R128GAIN" "1" "May 2014" "" ""
+.
+.SH "NAME"
+\fBr128gain\fR \- loudness normalizer based on the EBU R128 standard
+.
+.SH "SYNOPSIS"
+\fBr128gain [OPTIONS] FILES\.\.\.\fR
+.
+.SH "DESCRIPTION"
+\fBr128gain\fR is a loudness normalizer that scans music files and calculates loudness\-normalized gain and loudness peak values according to the EBU R128 standard, and can optionally write ReplayGain\-compatible metadata\.
+.
+.P
+r128gain implements a subset of mp3gain\'s command\-line options, which means that it can be used as a drop\-in replacement in some situations\.
+.
+.SH "OPTIONS"
+\fB\-r, \-\-track\fR
+.
+.P
+\~\~\~\~\~\~ Calculate track gain (default)\.
+.
+.P
+\fB\-a, \-\-album\fR
+.
+.P
+\~\~\~\~\~\~ Calculate album gain\.
+.
+.P
+\fB\-c, \-\-clip\fR
+.
+.P
+\~\~\~\~\~\~ Ignore clipping warnings\.
+.
+.P
+\fB\-k, \-\-noclip\fR
+.
+.P
+\~\~\~\~\~\~ Lower track and album gain to avoid clipping\.
+.
+.P
+\fB\-d, \-\-db\-gain\fR
+.
+.P
+\~\~\~\~\~\~ Apply the given pre\-amp value (in dB)\.
+.
+.P
+\fB\-s d, \-\-tag\-mode d\fR
+.
+.P
+\~\~\~\~\~\~ Delete ReplayGain tags from files\.
+.
+.P
+\fB\-s i, \-\-tag\-mode i\fR
+.
+.P
+\~\~\~\~\~\~ Write ID3v2 ReplayGain tags to files\.
+.
+.P
+\fB\-s s, \-\-tag\-mode s\fR
+.
+.P
+\~\~\~\~\~\~ Don\'t write ReplayGain tags (default)\.
+.
+.P
+\fB\-o, \-\-output\fR
+.
+.P
+\~\~\~\~\~\~ Database\-friendly tab\-delimited list output\.
+.
+.P
+\fB\-q, \-\-quiet\fR
+.
+.P
+\~\~\~\~\~\~ Don\'t print status messages\.
+.
+.SH "AUTHOR"
+Alessandro Ghedini \fIalessandro@ghedini\.me\fR
+.
+.SH "COPYRIGHT"
+Copyright (C) 2014 Alessandro Ghedini \fIalessandro@ghedini\.me\fR
+.
+.P
+This program is released under the 2 clause BSD license\.

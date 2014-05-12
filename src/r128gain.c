@@ -233,7 +233,7 @@ static inline void help(void) {
 
 	puts(COLOR_RED " Options:" COLOR_OFF);
 
-	CMD_HELP("--track",  "-r", "Calculate track gain");
+	CMD_HELP("--track",  "-r", "Calculate track gain (default)");
 	CMD_HELP("--album",  "-a", "Calculate album gain");
 
 	puts("");
@@ -242,15 +242,17 @@ static inline void help(void) {
 	CMD_HELP("--noclip", "-k", "Lower track and album gain to avoid clipping");
 
 	CMD_HELP("--db-gain",  "-d",  "Apply the given pre-amp value (in dB)");
-	CMD_HELP("--output",   "-o",  "Database-friendly tab-delimited list output");
 
 	puts("");
 
 	CMD_HELP("--tag-mode d", "-s d",  "Delete ReplayGain tags from files");
-	CMD_HELP("--tag-mode i", "-s i",  "Write ID3v2 tags to files");
-	CMD_HELP("--tag-mode s", "-s s",  "Don't write file tags");
+	CMD_HELP("--tag-mode i", "-s i",  "Write ID3v2 ReplayGain tags to files");
+	CMD_HELP("--tag-mode s", "-s s",  "Don't write ReplayGain tags (default)");
 
-	CMD_HELP("--quiet", "-q",  "Don't print status messages");
+	puts("");
+
+	CMD_HELP("--output", "-o",  "Database-friendly tab-delimited list output");
+	CMD_HELP("--quiet",  "-q",  "Don't print status messages");
 
 	puts("");
 }
