@@ -41,7 +41,7 @@
 #include "tag.h"
 #include "printf.h"
 
-const char *short_opts = "rackd:oqs:h";
+const char *short_opts = "rackd:oqs:h?";
 
 static struct option long_opts[] = {
 	{ "track",     no_argument,       NULL, 'r' },
@@ -60,6 +60,8 @@ static struct option long_opts[] = {
 	{ "help",      no_argument,       NULL, 'h' },
 	{ 0, 0, 0, 0 }
 };
+
+static inline void help(void);
 
 int main(int argc, char *argv[]) {
 	int rc, i;
@@ -112,8 +114,10 @@ int main(int argc, char *argv[]) {
 				mode = optarg[0];
 				break;
 
+			case '?':
 			case 'h':
-				break;
+				help();
+				return 0;
 		}
 	}
 
@@ -202,4 +206,32 @@ int main(int argc, char *argv[]) {
 	scan_deinit();
 
 	return 0;
+}
+
+static inline void help(void) {
+	#define CMD_HELP(CMDL, CMDS, MSG) printf("  %s, %-15s \t%s.\n", COLOR_YELLOW CMDS, CMDL COLOR_OFF, MSG);
+
+	printf(COLOR_RED "Usage: " COLOR_OFF);
+	printf(COLOR_GREEN "r128gain " COLOR_OFF);
+	puts("[OPTIONS] FILES...\n");
+
+	puts(COLOR_RED " Options:" COLOR_OFF);
+
+	CMD_HELP("--track",  "-r", "Calculate track gain");
+	CMD_HELP("--album",  "-a", "Calculate album gain");
+
+	puts("");
+
+	CMD_HELP("--clip",   "-c", "Ignore clipping warning");
+	CMD_HELP("--noclip", "-k", "Lower track and album gain to avoid clipping");
+
+	CMD_HELP("--db-gain",  "-d",  "Apply the given pre-amp value (in dB)");
+
+	puts("");
+
+	CMD_HELP("--tag-mode d", "-s d",  "Delete ReplayGain tags from files");
+	CMD_HELP("--tag-mode i", "-s i",  "Write ID3v2 tags to files");
+	CMD_HELP("--tag-mode s", "-s s",  "Don't write file tags");
+
+	puts("");
 }
