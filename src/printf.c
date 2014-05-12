@@ -41,11 +41,14 @@
 #include "util.h"
 
 int use_syslog = 0;
+int quiet = 0;
 
 static void do_log(const char *prefix, const char *fmt, va_list args);
 
 void ok_printf(const char *fmt, ...) {
 	va_list args;
+
+	if (quiet) return;
 
 	va_start(args, fmt);
 	do_log("[" COLOR_GREEN "✔" COLOR_OFF "] ", fmt, args);
@@ -54,6 +57,8 @@ void ok_printf(const char *fmt, ...) {
 
 void debug_printf(const char *fmt, ...) {
 	va_list args;
+
+	if (quiet) return;
 
 	va_start(args, fmt);
 	do_log("[" COLOR_YELLOW "¡" COLOR_OFF "] ", fmt, args);

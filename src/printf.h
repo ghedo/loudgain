@@ -39,6 +39,7 @@ extern "C" {
 #define COLOR_OFF	"[0m"
 
 extern int use_syslog;
+extern int quiet;
 
 extern void ok_printf(const char *fmt, ...);
 extern void debug_printf(const char *fmt, ...);

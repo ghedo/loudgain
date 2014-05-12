@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case 'q':
-				fail_printf("-q not implemented");
+				quiet = 1;
 				break;
 
 			case 's':
@@ -232,6 +232,8 @@ static inline void help(void) {
 	CMD_HELP("--tag-mode d", "-s d",  "Delete ReplayGain tags from files");
 	CMD_HELP("--tag-mode i", "-s i",  "Write ID3v2 tags to files");
 	CMD_HELP("--tag-mode s", "-s s",  "Don't write file tags");
+
+	CMD_HELP("--quiet", "-q",  "Don't print status messages");
 
 	puts("");
 }
