@@ -228,7 +228,7 @@ static inline void help(void) {
 	#define CMD_HELP(CMDL, CMDS, MSG) printf("  %s, %-15s \t%s.\n", COLOR_YELLOW CMDS, CMDL COLOR_OFF, MSG);
 
 	printf(COLOR_RED "Usage: " COLOR_OFF);
-	printf(COLOR_GREEN "r128gain " COLOR_OFF);
+	printf(COLOR_GREEN "loudgain " COLOR_OFF);
 	puts("[OPTIONS] FILES...\n");
 
 	puts(COLOR_RED " Options:" COLOR_OFF);

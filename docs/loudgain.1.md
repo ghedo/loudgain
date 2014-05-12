@@ -1,18 +1,17 @@
-r128gain(1) -- loudness normalizer based on the EBU R128 standard
+loudgain(1) -- loudness normalizer based on the EBU R128 standard
 =================================================================
 
 ## SYNOPSIS
 
-`r128gain [OPTIONS] FILES...`
+`loudgain [OPTIONS] FILES...`
 
 ## DESCRIPTION
 
-
-**r128gain** is a loudness normalizer that scans music files and calculates
+**loudgain** is a loudness normalizer that scans music files and calculates
 loudness-normalized gain and loudness peak values according to the EBU R128
 standard, and can optionally write ReplayGain-compatible metadata.
 
-r128gain implements a subset of mp3gain's command-line options, which means that
+loudgain implements a subset of mp3gain's command-line options, which means that
 it can be used as a drop-in replacement in some situations.
 
 ## OPTIONS
