@@ -265,41 +265,11 @@ static void scan_frame(ebur128_state *ebur128, AVFrame *frame,
 	uint8_t            *out_data;
 	size_t              out_size;
 	int                 out_linesize;
-	enum AVSampleFormat out_fmt;
+	enum AVSampleFormat out_fmt = AV_SAMPLE_FMT_S16;
 
 	av_opt_set_int(avr, "in_channel_layout", frame -> channel_layout, 0);
 	av_opt_set_int(avr, "out_channel_layout", frame -> channel_layout, 0);
 	av_opt_set_int(avr, "in_sample_fmt", frame -> format, 0);
-
-	switch (frame -> format) {
-		case AV_SAMPLE_FMT_S16:
-		case AV_SAMPLE_FMT_S32:
-		case AV_SAMPLE_FMT_DBL:
-		case AV_SAMPLE_FMT_FLT:
-			out_fmt = frame -> format;
-			break;
-
-		case AV_SAMPLE_FMT_S16P:
-			out_fmt = AV_SAMPLE_FMT_S16;
-			break;
-
-		case AV_SAMPLE_FMT_S32P:
-			out_fmt = AV_SAMPLE_FMT_S32;
-			break;
-
-		case AV_SAMPLE_FMT_DBLP:
-			out_fmt = AV_SAMPLE_FMT_DBL;
-			break;
-
-		case AV_SAMPLE_FMT_FLTP:
-			out_fmt = AV_SAMPLE_FMT_FLT;
-			break;
-
-		default:
-			fail_printf("Invalid sample format");
-			break;
-	}
-
 	av_opt_set_int(avr, "out_sample_fmt", out_fmt, 0);
 
 	rc = avresample_open(avr);
@@ -322,35 +292,9 @@ static void scan_frame(ebur128_state *ebur128, AVFrame *frame,
 	) < 0)
 		fail_printf("Cannor convert");
 
-	switch (out_fmt) {
-		case AV_SAMPLE_FMT_S16:
-			rc = ebur128_add_frames_short(
-				ebur128, (short *) out_data, frame -> nb_samples
-			);
-			break;
-
-		case AV_SAMPLE_FMT_S32:
-			rc = ebur128_add_frames_int(
-				ebur128, (int *) out_data, frame -> nb_samples
-			);
-			break;
-
-		case AV_SAMPLE_FMT_DBL:
-			rc = ebur128_add_frames_double(
-				ebur128, (double *) out_data, frame -> nb_samples
-			);
-			break;
-
-		case AV_SAMPLE_FMT_FLT:
-			rc = ebur128_add_frames_float(
-				ebur128, (float *) out_data, frame -> nb_samples
-			);
-			break;
-
-		default:
-			fail_printf("Invalid sample format");
-			break;
-	}
+	rc = ebur128_add_frames_short(
+		ebur128, (short *) out_data, frame -> nb_samples
+	);
 
 	if (rc != EBUR128_SUCCESS)
 		err_printf("Error filtering");
