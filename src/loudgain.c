@@ -198,12 +198,20 @@ int main(int argc, char *argv[]) {
 
 		if (tab_output) {
 			printf("%s\t", scan -> file);
-			printf("0\t");
+			printf("%d\t", 0);
 			printf("%f\t", scan -> track_gain);
 			printf("%f\t", scan -> track_peak * 32768.0);
-			printf("0\t");
-			printf("0\n");
+			printf("%d\t", 0);
+			printf("%d\n", 0);
 
+			if ((i == (nb_files - 1)) && do_album) {
+				printf("%s\t", "Album");
+				printf("%d\t", 0);
+				printf("%f\t", scan -> album_gain);
+				printf("%f\t", scan -> album_peak * 32768.0);
+				printf("%d\t", 0);
+				printf("%d\n", 0);
+			}
 		} else {
 			printf("\nTrack: %s\n", scan -> file);
 
