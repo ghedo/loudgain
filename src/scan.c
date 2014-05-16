@@ -47,6 +47,7 @@ static void scan_frame(ebur128_state *ebur128, AVFrame *frame,
 static void scan_av_log(void *avcl, int level, const char *fmt, va_list args);
 
 static ebur128_state **scan_states   = NULL;
+static enum AVCodecID *scan_codecs   = NULL;
 static char          **scan_files    = NULL;
 static int             scan_nb_files = 0;
 
@@ -65,6 +66,10 @@ int scan_init(unsigned nb_files) {
 
 	scan_files = malloc(sizeof(char *) * scan_nb_files);
 	if (scan_files == NULL)
+		fail_printf("OOM");
+
+	scan_codecs = malloc(sizeof(enum AVCodecID) * scan_nb_files);
+	if (scan_codecs == NULL)
 		fail_printf("OOM");
 
 	return 0;
@@ -147,6 +152,8 @@ int scan_file(const char *file, unsigned index) {
 		fail_printf("Could not open codec: %s", errbuf);
 	}
 
+	scan_codecs[index] = codec -> id;
+
 	av_init_packet(&packet);
 
 	packet.data = buffer;
@@ -225,6 +232,7 @@ scan_result *scan_get_track_result(unsigned index, double pre_gain) {
 	}
 
 	result -> file                 = scan_files[index];
+	result -> codec_id             = scan_codecs[index];
 
 	result -> track_gain           = LUFS_TO_RG(global) + pre_gain;
 	result -> track_peak           = peak;

@@ -34,6 +34,7 @@ extern "C" {
 
 typedef struct {
 	char *file;
+	int   codec_id;
 
 	double track_gain;
 	double track_peak;
