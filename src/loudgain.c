@@ -35,6 +35,7 @@
 #include <math.h>
 #include <getopt.h>
 
+#include <libavcodec/avcodec.h>
 #include <libavutil/common.h>
 
 #include "scan.h"
@@ -169,12 +170,28 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case 'd': /* delete tags */
-				tag_clear_mp3(scan);
+				switch (scan -> codec_id) {
+					case AV_CODEC_ID_MP3:
+						tag_clear_mp3(scan);
+						break;
+
+					default:
+						err_printf("File type not supported");
+						break;
+				}
 				break;
 
 			case 'i': /* ID3v2 tags */
-				tag_clear_mp3(scan);
-				tag_write_mp3(scan);
+				switch (scan -> codec_id) {
+					case AV_CODEC_ID_MP3:
+						tag_clear_mp3(scan);
+						tag_write_mp3(scan);
+						break;
+
+					default:
+						err_printf("File type not supported");
+						break;
+				}
 				break;
 
 			case 'a': /* APEv2 tags */
