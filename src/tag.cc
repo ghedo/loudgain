@@ -35,6 +35,9 @@
 #include <mpegfile.h>
 #include <id3v2tag.h>
 
+#include <flacfile.h>
+#include <xiphcomment.h>
+
 #include "scan.h"
 #include "tag.h"
 #include "printf.h"
@@ -93,4 +96,37 @@ void tag_clear_mp3(scan_result *scan) {
 	}
 
 	f.save(TagLib::MPEG::File::ID3v2, false);
+}
+
+void tag_write_flac(scan_result *scan) {
+	char value[2048];
+
+	TagLib::FLAC::File f(scan -> file);
+	TagLib::Ogg::XiphComment *tag = f.xiphComment(true);
+
+	snprintf(value, sizeof(value), "%f dB", scan -> track_gain);
+	tag -> addField("REPLAYGAIN_TRACK_GAIN", value);
+
+	snprintf(value, sizeof(value), "%f", scan -> track_peak);
+	tag -> addField("REPLAYGAIN_TRACK_PEAK", value);
+
+	snprintf(value, sizeof(value), "%f dB", scan -> album_gain);
+	tag -> addField("REPLAYGAIN_ALBUM_GAIN", value);
+
+	snprintf(value, sizeof(value), "%f", scan -> album_peak);
+	tag -> addField("REPLAYGAIN_ALBUM_PEAK", value);
+
+	f.save();
+}
+
+void tag_clear_flac(scan_result *scan) {
+	TagLib::FLAC::File f(scan -> file);
+	TagLib::Ogg::XiphComment *tag = f.xiphComment(true);
+
+	tag -> removeField("REPLAYGAIN_TRACK_GAIN");
+	tag -> removeField("REPLAYGAIN_TRACK_PEAK");
+	tag -> removeField("REPLAYGAIN_ALBUM_GAIN");
+	tag -> removeField("REPLAYGAIN_ALBUM_PEAK");
+
+	f.save();
 }

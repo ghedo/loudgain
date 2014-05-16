@@ -175,6 +175,10 @@ int main(int argc, char *argv[]) {
 						tag_clear_mp3(scan);
 						break;
 
+					case AV_CODEC_ID_FLAC:
+						tag_clear_flac(scan);
+						break;
+
 					default:
 						err_printf("File type not supported");
 						break;
@@ -186,6 +190,11 @@ int main(int argc, char *argv[]) {
 					case AV_CODEC_ID_MP3:
 						tag_clear_mp3(scan);
 						tag_write_mp3(scan);
+						break;
+
+					case AV_CODEC_ID_FLAC:
+						tag_clear_flac(scan);
+						tag_write_flac(scan);
 						break;
 
 					default:

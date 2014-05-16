@@ -35,6 +35,9 @@ extern "C" {
 void tag_write_mp3(scan_result *scan);
 void tag_clear_mp3(scan_result *scan);
 
+void tag_write_flac(scan_result *scan);
+void tag_clear_flac(scan_result *scan);
+
 #ifdef __cplusplus
 }
 #endif
