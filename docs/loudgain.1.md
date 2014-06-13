@@ -49,7 +49,7 @@ Delete ReplayGain tags from files.
 `-s i, --tag-mode i`
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Write ID3v2 ReplayGain tags to files.
+Write ReplayGain tags to files. ID3v2 for MP3, Vorbis Comments for FLAC.
 
 `-s s, --tag-mode s`
 

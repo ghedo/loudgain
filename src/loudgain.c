@@ -280,7 +280,7 @@ static inline void help(void) {
 	puts("");
 
 	CMD_HELP("--tag-mode d", "-s d",  "Delete ReplayGain tags from files");
-	CMD_HELP("--tag-mode i", "-s i",  "Write ID3v2 ReplayGain tags to files");
+	CMD_HELP("--tag-mode i", "-s i",  "Write ReplayGain tags to files");
 	CMD_HELP("--tag-mode s", "-s s",  "Don't write ReplayGain tags (default)");
 
 	puts("");
