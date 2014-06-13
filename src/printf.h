@@ -47,6 +47,8 @@ extern void err_printf(const char *fmt, ...);
 extern void fail_printf(const char *fmt, ...);
 extern void sysf_printf(const char *fmt, ...);
 
+extern void progress_bar(unsigned ctrl, unsigned x, unsigned n, unsigned w);
+
 #ifdef __cplusplus
 }
 #endif

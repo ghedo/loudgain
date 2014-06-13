@@ -37,6 +37,8 @@
 #include <syslog.h>
 #include <limits.h>
 
+#include <pty.h>
+
 #include "printf.h"
 #include "util.h"
 
@@ -44,6 +46,7 @@ int use_syslog = 0;
 int quiet = 0;
 
 static void do_log(const char *prefix, const char *fmt, va_list args);
+static void get_screen_size(int fd, unsigned *w, unsigned *h);
 
 void ok_printf(const char *fmt, ...) {
 	va_list args;
@@ -99,6 +102,59 @@ void sysf_printf(const char *fmt, ...) {
 	_exit(EXIT_FAILURE);
 }
 
+void progress_bar(unsigned ctrl, unsigned x, unsigned n, unsigned w) {
+	int i;
+	FILE *stream = stdout;
+	static int show_bar = 0;
+
+	switch (ctrl) {
+		case 0: /* init */
+			if (quiet)
+				break;
+
+			if (!isatty(fileno(stream)))
+				break;
+
+			show_bar = 1;
+
+			break;
+
+		case 1: /* draw */
+			if (show_bar != 1)
+				return;
+
+			if ((x != n) && (x % (n / 100 + 1) != 0))
+				return;
+
+			if (w == 0) {
+				get_screen_size(fileno(stream), &w, NULL);
+				w -= 8;
+			}
+
+			float ratio = x / (float) n;
+			int   c     = ratio * w;
+
+			fprintf(stream, " %3.0f%% [", ratio * 100);
+
+			for (i = 0; i < c; i++)
+				fputc('=', stream);
+
+			for (i = c; i < w; i++)
+				fputc(' ', stream);
+
+			fprintf(stream, "]\r");
+			fflush(stream);
+
+			break;
+
+		case 2: /* end */
+			if (show_bar == 1)
+				fputc('\n', stream);
+
+			break;
+	}
+}
+
 static void do_log(const char *pre, const char *fmt, va_list args) {
 	int rc;
 	static char format[LINE_MAX];
@@ -110,4 +166,17 @@ static void do_log(const char *pre, const char *fmt, va_list args) {
 		vsyslog(LOG_CRIT, format, args);
 	else
 		vfprintf(stderr, format, args);
+}
+
+static void get_screen_size(int fd, unsigned *w, unsigned *h) {
+	struct winsize ws;
+
+	if (ioctl(fd, TIOCGWINSZ, &ws) < 0 || !ws.ws_row || !ws.ws_col)
+		return;
+
+	if (w != NULL)
+		*w = ws.ws_col;
+
+	if (h != NULL)
+		*h = ws.ws_row;
 }

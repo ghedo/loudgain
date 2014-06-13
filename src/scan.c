@@ -88,6 +88,7 @@ void scan_deinit() {
 
 int scan_file(const char *file, unsigned index) {
 	int i, rc, stream_id = -1;
+	double start = 0, len = 0;
 
 	AVFormatContext *container = NULL;
 
@@ -173,18 +174,35 @@ int scan_file(const char *file, unsigned index) {
 	if (frame == NULL)
 		fail_printf("OOM");
 
+	if (container -> streams[stream_id] -> start_time != AV_NOPTS_VALUE)
+		start = container -> streams[stream_id] -> start_time *
+		        av_q2d(container -> streams[stream_id] -> time_base);
+
+	if (container -> streams[stream_id] -> duration != AV_NOPTS_VALUE)
+		len   = container -> streams[stream_id] -> duration *
+		        av_q2d(container -> streams[stream_id] -> time_base);
+
+	progress_bar(0, 0, 0, 0);
+
 	while (av_read_frame(container, &packet) >= 0) {
 		if (packet.stream_index == stream_id) {
 			int got_frame = 0;
 
 			avcodec_decode_audio4(ctx, frame, &got_frame, &packet);
 
-			if (got_frame)
+			if (got_frame) {
+				double pos = frame -> pkt_dts *
+				             av_q2d(container -> streams[stream_id] -> time_base);
 				scan_frame(*ebur128, frame, avr);
+
+				progress_bar(1, pos - start, len, 0);
+			}
 		}
 
 		av_free_packet(&packet);
 	}
+
+	progress_bar(2, 0, 0, 0);
 
 	av_frame_free(&frame);
 
