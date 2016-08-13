@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+
+TAG = $(shell git tag | tail -1 | cut -b 2-)
+VER = $(shell dpkg-parsechangelog | sed -rne 's,^Version: ([^-]+).*,\1,p')
+
+%:
+	dh $@
+
+override_dh_strip:
+	dh_strip --no-automatic-dbgsym
+
+create-orig:
+	git archive --format=tar.gz --prefix=loudgain-$(TAG)/	\
+		--output loudgain_$(VER).orig.tar.gz HEAD

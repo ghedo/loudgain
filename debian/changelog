@@ -1,0 +1,5 @@
+loudgain (0.1-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)
+
+ -- Alessandro Ghedini <ghedo@debian.org>  Mon, 26 Jun 2017 22:10:59 +0100

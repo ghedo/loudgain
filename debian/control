@@ -1,0 +1,33 @@
+Source: loudgain
+Section: sound
+Priority: optional
+Maintainer: Alessandro Ghedini <ghedo@debian.org>
+Build-Depends: debhelper (>= 9), cmake,
+ libavcodec-dev,
+ libavfilter-dev,
+ libavformat-dev,
+ libavresample-dev,
+ libavutil-dev,
+ libebur128-dev,
+ libtag1-dev,
+ pkg-config
+Standards-Version: 4.1.0
+Homepage: https://github.com/ghedo/loudgain
+#Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/loudgain.git
+#Vcs-Git: git://anonscm.debian.org/collab-maint/loudgain.git
+
+Package: loudgain
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: loudness normalizer based on the EBU R128 standard
+ loudgain is a loudness normalizer that scans music files and calculates
+ loudness-normalized gain and loudness peak values according to the EBU R128
+ standard, and can optionally write ReplayGain-compatible metadata.
+ .
+ EBU R128 is a set of recommendations regarding loudness normalisation based on
+ the algorithms to measure audio loudness and true-peak audio level defined in
+ the ITU BS.1770 standard, and is used in the (currently under construction)
+ ReplayGain 2.0 specification.
+ .
+ loudgain implements a subset of mp3gain's command-line options, which means
+ that it can be used as a drop-in replacement in some situations.
